@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Switch, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, Switch, Text, View, NativeModules } from 'react-native';
 
 const App = () => {
   const [blockerStatus, setBlockerStatus] = useState(false);
   const [blockedApps, setBlockedApps] = useState([]);
+  const [appList, setAppList] = useState([]);
+
+  useEffect(() => {
+      NativeModules.AppList.getApps().then(apps => {
+          setAppList(apps);
+      }).catch(error => {
+          console.error(error);
+      });
+  }, []);
 
   const toggleBlocker = () => {
     setBlockerStatus(!blockerStatus);
@@ -40,8 +49,8 @@ const App = () => {
 
         <View style={styles.section}>
           <Text style={styles.sectionHeading}>Blocked Apps</Text>
-          {appList.map((app) => (
-            <View style={styles.appItem} key={app}>
+          {appList.map((app, index) => (
+            <View style={styles.appItem} key={index}>
               <Text style={styles.appName}>{app}</Text>
               <Switch
                 value={blockedApps.includes(app)}
@@ -56,8 +65,6 @@ const App = () => {
     </SafeAreaView>
   );
 };
-
-const appList = ['Chrome', 'Settings', 'YouTube', 'Play Store'];
 
 const styles = {
   container: {
