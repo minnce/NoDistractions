@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Switch, Text, View, NativeModules } from 'react-native';
+import { SafeAreaView, ScrollView, Switch, Text, View, NativeModules, Linking, Button } from 'react-native';
 
 const App = () => {
   const [blockerStatus, setBlockerStatus] = useState(false);
@@ -7,12 +7,22 @@ const App = () => {
   const [appList, setAppList] = useState([]);
 
   useEffect(() => {
-      NativeModules.AppList.getApps().then(apps => {
-          setAppList(apps);
-      }).catch(error => {
-          console.error(error);
-      });
+    NativeModules.AppList.getApps().then(apps => {
+      setAppList(apps);
+    }).catch(error => {
+      console.error(error);
+    });
+
   }, []);
+
+  const onRegister = (token) => {
+    console.log( 'TOKEN:', token);
+  };
+
+
+  const requestPermission = () => {
+    Linking.openURL('android.settings.APPLICATION_DETAILS_SETTINGS?package=com.nodistractions2');
+  };
 
   const toggleBlocker = () => {
     setBlockerStatus(!blockerStatus);
