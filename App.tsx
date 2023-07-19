@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, Switch, Text, View } from 'react-native';
 
-
 const App = () => {
   const [blockerStatus, setBlockerStatus] = useState(false);
   const [blockedApps, setBlockedApps] = useState([]);
@@ -20,19 +19,23 @@ const App = () => {
   };
 
   return (
-    <SafeAreaView>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.heading}>App Blocker</Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Text style={styles.heading}>No Distractions</Text>
 
         <View style={styles.section}>
           <Text style={styles.sectionHeading}>Blocker Status</Text>
-          <Switch
-            value={blockerStatus}
-            onValueChange={toggleBlocker}
-          />
-          <Text style={styles.statusText}>
-            {blockerStatus ? 'Blocker is ON' : 'Blocker is OFF'}
-          </Text>
+          <View style={styles.switchContainer}>
+            <Switch
+              value={blockerStatus}
+              onValueChange={toggleBlocker}
+              trackColor={{ false: '#767577', true: '#81b0ff' }}
+              thumbColor={blockerStatus ? '#f5dd4b' : '#f4f3f4'}
+            />
+            <Text style={styles.statusText}>
+              {blockerStatus ? 'Blocker is ON' : 'Blocker is OFF'}
+            </Text>
+          </View>
         </View>
 
         <View style={styles.section}>
@@ -43,6 +46,8 @@ const App = () => {
               <Switch
                 value={blockedApps.includes(app)}
                 onValueChange={() => toggleAppBlock(app)}
+                trackColor={{ false: '#767577', true: '#81b0ff' }}
+                thumbColor={blockedApps.includes(app) ? '#f5dd4b' : '#f4f3f4'}
               />
             </View>
           ))}
@@ -52,16 +57,21 @@ const App = () => {
   );
 };
 
-const appList = ['App 1', 'App 2', 'App 3', 'App 4'];
+const appList = ['Chrome', 'Settings', 'YouTube', 'Play Store'];
 
 const styles = {
   container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  scrollContainer: {
     padding: 16,
   },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
+    textAlign: 'center',
   },
   section: {
     marginBottom: 16,
@@ -71,9 +81,14 @@ const styles = {
     fontWeight: 'bold',
     marginBottom: 8,
   },
+  switchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   statusText: {
     fontSize: 16,
     color: 'gray',
+    marginLeft: 8,
   },
   appItem: {
     flexDirection: 'row',
