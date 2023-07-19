@@ -33,8 +33,11 @@ public class AppListModule extends ReactContextBaseJavaModule {
 
             WritableArray appList = Arguments.createArray();
             for (ApplicationInfo packageInfo : packages) {
-                String appName = (String) pm.getApplicationLabel(packageInfo);
-                appList.pushString(appName);
+                // check if the app is not a system app
+                if ((packageInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                    String appName = (String) pm.getApplicationLabel(packageInfo);
+                    appList.pushString(appName);
+                }
             }
 
             Log.d("AppList", "App list: " + appList.toString());
